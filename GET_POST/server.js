@@ -3,12 +3,18 @@ var fs = require('fs');
 var querystring = require('querystring');
 const port = 3000;
 
+var url = require('url');
+
 var server = http.createServer(function(req, res) {
+
+    var uri = req.url;
+    var query = url.parse(uri, true).query;
 
     if(req.method == 'GET'){
         fs.readFile('./index.html' ,'utf8' ,function(error, data) {
             res.writeHead(200, {'Content-Type' : 'text/html'});
-            res.end(data);
+            res.end('ID : ' + query.id + 'PW : ' + query.pw);
+            //res.end(data);
         });
     }
     else if(req.method == 'POST'){
@@ -16,7 +22,7 @@ var server = http.createServer(function(req, res) {
             console.log(chunk.toString());
             var data = querystring.parse(chunk.toString());
             res.writeHead(200, {'Content-Type' : 'text/html'});
-            res.end('ID : ' + data.id + '\nPW : ' + data.pw);
+            res.end('ID : ' + data.id + 'PW : ' + data.pw);
         });
     }
 
